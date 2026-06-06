@@ -1,1171 +1,493 @@
-# 🐬 MySQL Mastery - Complete Learning Repository
+# 🎓 DBMS Practical - Complete SQL Learning Repository
 
-A comprehensive, structured learning resource for mastering MySQL from fundamentals to advanced concepts. This repository is organized according to a university-level database curriculum, covering everything from basic DDL commands to advanced SQL concepts.
-
-> **Your personal SQL learning guide with real examples and outputs!** Learn by doing, not just reading.
+A comprehensive collection of SQL practical exercises covering fundamental to advanced Database Management System concepts. This repository contains hands-on examples with the `college_db` database featuring students, instructors, departments, and more.
 
 ---
 
-## 🎯 Quick Start (5 Minutes)
+## 📚 Repository Contents
 
-### What is SQL?
-**SQL (Structured Query Language)** is a language used to communicate with databases. It allows you to:
-- **Create** tables to store data
-- **Read** data from tables
-- **Update** existing data
-- **Delete** data when needed
+### 1️⃣ **Creating tables ARD.sql**
+**Foundation - Database & Table Creation**
+- Creating `college_db` database
+- Creating tables: `students`, `instructor`, `alumni`
+- Inserting sample data for 14+ students and 15 instructors
+- Using `DESCRIBE` to view table structure
+- Tables include PRIMARY KEY and AUTO_INCREMENT constraints
 
-### First Example: Create a Table
-
-**Theory**: A table is like a spreadsheet with rows and columns. Each column has a name and data type.
-
-**SQL Code**:
-```sql
-CREATE TABLE students (
-    student_id INT PRIMARY KEY,
-    name VARCHAR(100),
-    age INT,
-    email VARCHAR(100)
-);
-```
-
-**What happens**: Creates an empty table ready to store student information.
+**Key Concepts:**
+- `CREATE DATABASE` and `USE`
+- `CREATE TABLE` with various data types (INT, VARCHAR)
+- `INSERT INTO` with multiple records
+- `SELECT *` to retrieve data
 
 ---
 
-### Second Example: Insert Data
+### 2️⃣ **Data constraints ARD.sql**
+**Referential Integrity & Constraints**
+- Creating relational database schema with 4 interconnected tables
+- Implementing PRIMARY KEY and FOREIGN KEY constraints
+- NOT NULL constraints
 
-**Theory**: INSERT adds new records (rows) to your table.
+**Database Schema:**
+- **Department** → dept_id (PK), dept_name
+- **Faculty** → faculty_id (PK), faculty_name, dept_id (FK)
+- **Student** → student_id (PK), student_name, dept_id (FK)
+- **Subject** → subject_id (PK), subject_name, faculty_id (FK), dept_id (FK)
 
-**SQL Code**:
-```sql
-INSERT INTO students VALUES 
-(1, 'Ali', 20, 'ali@email.com'),
-(2, 'Zara', 19, 'zara@email.com'),
-(3, 'Hassan', 21, 'hassan@email.com');
-```
-
-**Output** - Table now looks like:
-```
-student_id | name   | age | email
------------|--------|-----|------------------
-1          | Ali    | 20  | ali@email.com
-2          | Zara   | 19  | zara@email.com
-3          | Hassan | 21  | hassan@email.com
-```
+**Key Concepts:**
+- Foreign Key relationships
+- Referential integrity
+- Multi-table database design
 
 ---
 
-### Third Example: Read Data
+### 3️⃣ **Aggregates Function and Group By ARD.sql**
+**Statistical Analysis & Grouping**
 
-**Theory**: SELECT retrieves data from your table.
+**Aggregate Functions Covered:**
+- `COUNT(*)` - Total rows count
+- `COUNT(column)` - Count non-NULL values
+- `AVG(salary)` - Calculate average
+- `SUM(salary)` - Calculate total sum
+- `GROUP BY` - Department-wise salary analysis
 
-**SQL Code**:
+**Example Queries:**
 ```sql
-SELECT name, age FROM students WHERE age > 19;
-```
-
-**Output**:
-```
-name   | age
--------|-----
-Ali    | 20
-Hassan | 21
+-- Average salary by department
+SELECT department, AVG(salary)
+FROM instructor
+GROUP BY department;
 ```
 
 ---
 
-## 📚 Repository Organization
+### 4️⃣ **String and Set Operation, Order By ARD.sql**
+**Pattern Matching, Sorting & Set Theory**
 
-## 📚 Repository Organization
+**String Operations:**
+- `LIKE 'R%'` - Names starting with 'R'
+- `LIKE '%h'` - Names ending with 'h'
+- `LIKE '%var%'` - Names containing 'var'
 
-This repository is organized into **3 major chapters**, each building upon the previous:
+**Sorting:**
+- `ORDER BY marks ASC` - Ascending order
+- `ORDER BY age DESC` - Descending order
+
+**Range Queries:**
+- `BETWEEN 70 AND 90` - Marks range filtering
+
+**Set Operations:**
+- `UNION` - Combine results from multiple queries
+- `INTERSECT` (using AND) - Common elements
+- `EXCEPT` (using NOT IN) - Difference between sets
 
 ---
 
-## 📖 CHAPTER 1: Introduction to SQL - Master the Basics
+### 5️⃣ **Type of Joints ARD.sql**
+**Complete JOIN Operations Guide**
 
-### What You'll Learn in Chapter 1
-- How to **create** and **modify** tables (DDL)
-- How to **retrieve** data using SELECT queries (DQL)
-- How to **filter** results with WHERE clauses
-- How to **sort** data and **handle NULL values**
-- How to **combine** results from multiple queries
+**All JOIN Types Demonstrated:**
+1. **INNER JOIN** - Matching records from both tables
+2. **LEFT JOIN** - All records from left + matching from right
+3. **RIGHT JOIN** - All records from right + matching from left
+4. **FULL OUTER JOIN** - All records from both (via UNION)
+5. **CROSS JOIN** - Cartesian product of tables
 
----
-
-### 1️⃣ **01-DDL-Commands**: Define Database Structures
-
-#### 📌 Theory: What is DDL?
-**DDL = Data Definition Language** — These commands define how data is organized.
-
-**Key Commands:**
-- `CREATE TABLE` — Create a new table
-- `ALTER TABLE` — Modify an existing table
-- `DROP TABLE` — Delete a table
-
-#### 💡 Example 1: CREATE TABLE
-**Purpose**: Design a table to store employee information
-
-**SQL Code**:
+**Example:**
 ```sql
-CREATE TABLE employees (
-    emp_id INT PRIMARY KEY AUTO_INCREMENT,
-    first_name VARCHAR(50) NOT NULL,
-    last_name VARCHAR(50) NOT NULL,
-    salary DECIMAL(10,2),
-    hire_date DATE
-);
+SELECT s.id, s.name, s.course, d.dept_name
+FROM students s
+INNER JOIN department d
+ON s.dept_id = d.dept_id;
 ```
 
-**Explanation**:
-- `emp_id INT PRIMARY KEY` — Unique identifier for each employee
-- `first_name VARCHAR(50) NOT NULL` — Name field, max 50 characters, required
-- `salary DECIMAL(10,2)` — Salary with 2 decimal places (e.g., 50000.00)
-
-**Output**: ✅ Table created successfully
+**Includes:** UPDATE operation to demonstrate NULL handling in joins
 
 ---
 
-#### 💡 Example 2: ALTER TABLE
-**Purpose**: Add a new column to store phone numbers
+### 6️⃣ **Subqueries in Form and With Clause ARD.sql**
+**Nested Queries & Common Table Expressions**
 
-**SQL Code**:
+**Two Major Approaches:**
+
+**1. Subqueries in FROM Clause:**
 ```sql
-ALTER TABLE employees ADD COLUMN phone VARCHAR(20);
+SELECT dept_name, avg_salary
+FROM (SELECT dept_name, AVG(salary) as avg_salary
+      FROM instructor
+      GROUP BY dept_name)
+WHERE avg_salary > 42000;
 ```
 
-**Output**: ✅ New column added
-
-**Result** — Table structure changes:
-```
-Column Name | Type        | Can Be Null
-------------|-------------|-------------
-emp_id      | INT         | No
-first_name  | VARCHAR(50) | No
-last_name   | VARCHAR(50) | No
-salary      | DECIMAL     | Yes
-hire_date   | DATE        | Yes
-phone       | VARCHAR(20) | Yes (NEW)
+**2. WITH Clause (CTE):**
+```sql
+WITH max_budget (value) AS 
+(SELECT MAX(budget) FROM department)
+SELECT department.name
+FROM department, max_budget
+WHERE department.budget = max_budget.value;
 ```
 
-**Files to Study**:
-- `01-Create-Table-Construct.sql` — Create tables with data types
-- `02-Alter-Table-Commands.sql` — Modify table structures
-- `03-Drop-Table-Command.sql` — Remove tables safely
+**Key Concepts:**
+- Inline views
+- Common Table Expressions (CTE)
+- Derived tables with aliases
 
 ---
 
-### 2️⃣ **02-Basic-Query-Components**: Retrieve and Filter Data
+### 7️⃣ **Null Values and Null Values (Cont.) ARD.sql**
+**NULL Handling & Three-Valued Logic**
 
-#### 📌 Theory: The SELECT Statement
-SELECT is the most used command in SQL. It follows this structure:
-```
-SELECT [what columns] FROM [which table] WHERE [conditions];
-```
+**NULL Checks:**
+- `IS NULL` - Find NULL values
+- `IS NOT NULL` - Find non-NULL values
 
-#### 💡 Example 1: SELECT All Columns
-**Purpose**: View all employee information
+**Three-Valued Logic (TRUE/FALSE/UNKNOWN):**
+- `AND` with UNKNOWN behavior
+- `OR` with UNKNOWN behavior
+- `NOT` with UNKNOWN behavior
 
-**SQL Code**:
+**Complex NULL Scenarios:**
 ```sql
-SELECT * FROM employees;
-```
+-- AND with mixed conditions
+SELECT name FROM instructor
+WHERE salary > 50000 AND department = 'IT';
 
-**Output**:
-```
-emp_id | first_name | last_name | salary    | hire_date  | phone
--------|------------|-----------|-----------|------------|----------
-1      | Ahmed      | Ali       | 75000.00  | 2023-01-15 | 0300-1111
-2      | Fatima     | Khan      | 65000.00  | 2023-02-20 | 0300-2222
-3      | Hassan     | Malik     | 80000.00  | 2023-01-10 | 0300-3333
+-- OR with UNKNOWN
+SELECT name FROM instructor
+WHERE salary > 60000 OR department = 'IT';
 ```
 
 ---
 
-#### 💡 Example 2: SELECT Specific Columns
-**Purpose**: View only names and salaries
+### 8️⃣ **Exists and Not Exists ARD.sql**
+**Correlated Subqueries & Existence Testing**
 
-**SQL Code**:
+**EXISTS Clause:**
+- Find courses offered in both Fall 2017 and Spring 2018
+- Correlated subquery checking existence
+
+**NOT EXISTS Clause:**
+- Find students who completed ALL Computer department courses
+- Uses EXCEPT (difference) operation
+- Complex multi-level subquery
+
+**Example:**
 ```sql
-SELECT first_name, last_name, salary FROM employees;
-```
-
-**Output**:
-```
-first_name | last_name | salary
------------|-----------|----------
-Ahmed      | Ali       | 75000.00
-Fatima     | Khan      | 65000.00
-Hassan     | Malik     | 80000.00
+SELECT course_id FROM section AS S
+WHERE semester = 'Fall' AND year = 2017 
+AND EXISTS (SELECT * FROM section AS T
+            WHERE semester = 'Spring' AND year = 2018 
+            AND S.course_id = T.course_id);
 ```
 
 ---
 
-#### 💡 Example 3: WHERE Clause - Filter Data
-**Purpose**: Find employees earning more than 70,000
+### 9️⃣ **SOME and ALL clause ARD.sql**
+**Comparison with Multiple Values**
 
-**SQL Code**:
+**SOME (ANY) Operator:**
+- Salary greater than SOME (at least one) Computer dept instructor
+- Returns true if condition is true for at least one value
+
+**ALL Operator:**
+- Salary greater than ALL Computer dept instructors
+- Returns true only if condition is true for all values
+
+**Syntax:**
 ```sql
-SELECT first_name, last_name, salary FROM employees WHERE salary > 70000;
-```
+-- SOME: Greater than at least one
+SELECT name FROM instructor
+WHERE salary > SOME (SELECT salary FROM instructor 
+                     WHERE dept_name = 'Computer');
 
-**Output**:
-```
-first_name | last_name | salary
------------|-----------|----------
-Ahmed      | Ali       | 75000.00
-Hassan     | Malik     | 80000.00
-```
-
-**Why**: Only 2 employees earn more than 70,000. Fatima's 65,000 doesn't match.
-
----
-
-#### 💡 Example 4: AND Operator - Multiple Conditions
-**Purpose**: Find employees in Sales earning more than 70,000
-
-**SQL Code**:
-```sql
-SELECT first_name, salary FROM employees 
-WHERE salary > 70000 AND hire_date > '2023-01-15';
-```
-
-**Output**:
-```
-first_name | salary
------------|----------
-Hassan     | 80000.00
-```
-
-**Why**: Hassan is hired after Jan 15 AND earns > 70,000
-
----
-
-#### 💡 Example 5: ORDER BY - Sort Results
-**Purpose**: List employees from highest to lowest salary
-
-**SQL Code**:
-```sql
-SELECT first_name, salary FROM employees ORDER BY salary DESC;
-```
-
-**Output**:
-```
-first_name | salary
------------|----------
-Hassan     | 80000.00
-Ahmed      | 75000.00
-Fatima     | 65000.00
-```
-
-**DESC** = Descending (highest first). Use **ASC** for ascending (lowest first).
-
-**Files to Study**:
-- `01-SELECT-Clause.sql` — Select columns, create aliases
-- `02-WHERE-Clause.sql` — Filter with conditions
-- `03-FROM-Clause.sql` — Understand table sources
-
----
-
-### 3️⃣ **03-Additional-Base-Operations**: Advanced Single-Table Queries
-
-#### 💡 Example 1: AS Clause - Rename Columns
-**Purpose**: Make output more readable with custom column names
-
-**SQL Code**:
-```sql
-SELECT 
-    first_name AS "Employee Name",
-    salary AS "Monthly Salary",
-    salary * 12 AS "Annual Salary"
-FROM employees;
-```
-
-**Output**:
-```
-Employee Name | Monthly Salary | Annual Salary
---------------|----------------|---------------
-Ahmed         | 75000.00       | 900000.00
-Fatima        | 65000.00       | 780000.00
-Hassan        | 80000.00       | 960000.00
+-- ALL: Greater than all
+SELECT name FROM instructor
+WHERE salary > ALL (SELECT salary FROM instructor 
+                    WHERE dept_name = 'Computer');
 ```
 
 ---
 
-#### 💡 Example 2: LIKE - Pattern Matching
-**Purpose**: Find employees whose name starts with 'A'
-
-**SQL Code**:
-```sql
-SELECT first_name, last_name FROM employees WHERE first_name LIKE 'A%';
-```
-
-**Output**:
-```
-first_name | last_name
------------|----------
-Ahmed      | Ali
-```
-
-**Wildcards**:
-- `%` = any characters (0 or more)
-- `_` = exactly one character
-- `'A%'` = starts with A
-- `'%z'` = ends with z
-- `'%en%'` = contains 'en'
-
----
-
-#### 💡 Example 3: String Functions
-**Purpose**: Display names in uppercase
-
-**SQL Code**:
-```sql
-SELECT UPPER(first_name), LOWER(last_name), LENGTH(first_name) FROM employees;
-```
-
-**Output**:
-```
-UPPER(first_name) | LOWER(last_name) | LENGTH(first_name)
-------------------|------------------|-------------------
-AHMED             | ali              | 5
-FATIMA            | khan             | 6
-HASSAN            | malik            | 6
-```
-
-**Files to Study**:
-- `01-Rename-AS-Clause.sql` — Column aliasing
-- `02-Self-Join-Queries.sql` — Compare rows in same table
-- `03-String-Operations-Pattern-Matching.sql` — LIKE and string functions
-- `04-Order-By-Clause.sql` — Sorting and LIMIT
-
----
-
-### 4️⃣ **04-Set-Operations**: Combine Multiple Queries
-
-#### 📌 Theory: What are Set Operations?
-Combine results from multiple SELECT statements.
-
-#### 💡 Example: UNION - Combine Results
-**Purpose**: Get all unique employees from two departments
-
-**SQL Code**:
-```sql
-SELECT name FROM it_employees
-UNION
-SELECT name FROM sales_employees;
-```
-
-**Output**:
-```
-name
---------
-Ahmed
-Hassan
-Fatima
-```
-
-**UNION removes duplicates. Use UNION ALL to keep duplicates.**
-
-**Files to Study**:
-- `01-Union-Union-All.sql` — Combine result sets
-- `02-Intersect-Intersect-All.sql` — Find common rows
-- `03-Except-Except-All.sql` — Find differences
-
----
-
-### 5️⃣ **05-Null-Value-Handling**: Handle Missing Data
-
-#### 📌 Theory: What is NULL?
-**NULL** means "no value" or "unknown". It's different from empty string or zero.
-
-#### 💡 Example: Check for NULL Values
-**Purpose**: Find employees without phone numbers
-
-**SQL Code**:
-```sql
-SELECT first_name FROM employees WHERE phone IS NULL;
-```
-
-**Output**:
-```
-first_name
-----------
-Fatima
-```
-
-**Why**: Fatima has no phone number stored.
-
----
-
-## 📖 CHAPTER 2: Advanced SQL - Master Complex Queries
-
-### What You'll Learn in Chapter 2
-- How to **summarize** data with aggregate functions
-- How to **group** data and filter groups
-- How to **modify** data (INSERT, UPDATE, DELETE)
-- How to **enforce** data integrity with constraints
-
----
-
-### 1️⃣ **01-Aggregate-Functions**: Summarize Data
-
-#### 📌 Theory: What are Aggregate Functions?
-Functions that calculate values from multiple rows:
-- `COUNT()` — Count rows
-- `SUM()` — Add values
-- `AVG()` — Calculate average
-- `MIN()` — Find minimum
-- `MAX()` — Find maximum
-
-#### 💡 Example 1: COUNT - Count Rows
-**Purpose**: How many employees do we have?
-
-**SQL Code**:
-```sql
-SELECT COUNT(*) AS "Total Employees" FROM employees;
-```
-
-**Output**:
-```
-Total Employees
----------------
-3
-```
-
----
-
-#### 💡 Example 2: SUM and AVG - Calculate Totals
-**Purpose**: What's the total and average salary?
-
-**SQL Code**:
-```sql
-SELECT 
-    SUM(salary) AS "Total Salary",
-    AVG(salary) AS "Average Salary",
-    COUNT(*) AS "Number of Employees"
-FROM employees;
-```
-
-**Output**:
-```
-Total Salary | Average Salary | Number of Employees
--------------|----------------|-------------------
-220000.00    | 73333.33       | 3
-```
-
----
-
-#### 💡 Example 3: GROUP BY - Summarize by Department
-**Purpose**: Count employees in each department
-
-**SQL Code**:
-```sql
-SELECT department, COUNT(*) AS "Employee Count" FROM employees GROUP BY department;
-```
-
-**Output**:
-```
-department | Employee Count
------------|---------------
-IT         | 2
-Sales      | 1
-```
-
----
-
-#### 💡 Example 4: HAVING - Filter Groups
-**Purpose**: Show departments with more than 1 employee
-
-**SQL Code**:
-```sql
-SELECT department, COUNT(*) AS "Employee Count" 
-FROM employees 
-GROUP BY department 
-HAVING COUNT(*) > 1;
-```
-
-**Output**:
-```
-department | Employee Count
------------|---------------
-IT         | 2
-```
-
-**Note**: HAVING filters GROUPS (use it after GROUP BY). WHERE filters ROWS (use before GROUP BY).
-
-**Files to Study**:
-- `01-Basic-Column-Aggregations.sql` — COUNT, SUM, AVG, MIN, MAX
-- `02-Group-By-Clause.sql` — Partition data into groups
-- `03-Having-Clause.sql` — Filter grouped results
-
----
-
-### 2️⃣ **03-Database-Modification-Commands**: Insert, Update, Delete
-
-#### 💡 Example 1: INSERT - Add New Data
-**Purpose**: Add a new employee
-
-**SQL Code**:
-```sql
-INSERT INTO employees (emp_id, first_name, last_name, salary, hire_date) 
-VALUES (4, 'Amina', 'Shah', 78000.00, '2023-03-01');
-```
-
-**Output**: ✅ 1 row inserted
-
-**Verification**:
-```sql
-SELECT * FROM employees;
-```
-
-**Output**:
-```
-emp_id | first_name | last_name | salary    | hire_date
--------|------------|-----------|-----------|----------
-1      | Ahmed      | Ali       | 75000.00  | 2023-01-15
-2      | Fatima     | Khan      | 65000.00  | 2023-02-20
-3      | Hassan     | Malik     | 80000.00  | 2023-01-10
-4      | Amina      | Shah      | 78000.00  | 2023-03-01 (NEW)
-```
-
----
-
-#### 💡 Example 2: UPDATE - Modify Data
-**Purpose**: Increase Hassan's salary to 85,000
-
-**SQL Code**:
-```sql
-UPDATE employees SET salary = 85000 WHERE first_name = 'Hassan';
-```
-
-**Output**: ✅ 1 row updated
-
-**Verification**:
-```sql
-SELECT first_name, salary FROM employees WHERE first_name = 'Hassan';
-```
-
-**Output**:
-```
-first_name | salary
------------|----------
-Hassan     | 85000.00 (UPDATED)
-```
-
----
-
-#### 💡 Example 3: DELETE - Remove Data
-**Purpose**: Remove the employee with ID 4
-
-**SQL Code**:
-```sql
-DELETE FROM employees WHERE emp_id = 4;
-```
-
-**Output**: ✅ 1 row deleted
-
-**Verification**:
-```sql
-SELECT COUNT(*) FROM employees;
-```
-
-**Output**:
-```
-COUNT(*)
---------
-3
-```
-
-**Warning ⚠️**: Always use WHERE clause with DELETE! Without it, ALL rows are deleted!
-
-**Files to Study**:
-- `01-Insert-Commands.sql` — Insert single/multiple rows
-- `02-Update-Commands.sql` — Modify existing data
-- `03-Delete-Commands.sql` — Remove data safely
-
----
-
-### 3️⃣ **04-Data-Constraints**: Enforce Data Integrity
-
-#### 📌 Theory: What are Constraints?
-Rules that ensure data quality and relationships.
-
-#### 💡 Example 1: PRIMARY KEY
-**Purpose**: Ensure each employee has a unique ID
-
-**SQL Code**:
-```sql
-CREATE TABLE employees (
-    emp_id INT PRIMARY KEY,
-    name VARCHAR(100)
-);
-```
-
-**What happens**: You can't insert duplicate emp_id values.
-
-**Test**:
-```sql
-INSERT INTO employees VALUES (1, 'Ahmed');
-INSERT INTO employees VALUES (1, 'Hassan');  -- ERROR! emp_id 1 already exists
-```
-
----
-
-#### 💡 Example 2: FOREIGN KEY
-**Purpose**: Link employees to departments
-
-**SQL Code**:
-```sql
-CREATE TABLE departments (
-    dept_id INT PRIMARY KEY,
-    dept_name VARCHAR(100)
-);
-
-CREATE TABLE employees (
-    emp_id INT PRIMARY KEY,
-    name VARCHAR(100),
-    dept_id INT,
-    FOREIGN KEY (dept_id) REFERENCES departments(dept_id)
-);
-```
-
-**What happens**: emp_id can only reference valid department IDs.
-
-**Test**:
-```sql
-INSERT INTO employees VALUES (1, 'Ahmed', 999);  -- ERROR! dept_id 999 doesn't exist
-```
-
----
-
-#### 💡 Example 3: NOT NULL
-**Purpose**: Ensure every employee has a name
-
-**SQL Code**:
-```sql
-CREATE TABLE employees (
-    emp_id INT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL
-);
-```
-
-**Test**:
-```sql
-INSERT INTO employees VALUES (1, 'Ahmed');  ✅ OK
-INSERT INTO employees VALUES (2, NULL);     ❌ ERROR! Name cannot be empty
-```
-
----
-
-#### 💡 Example 4: UNIQUE
-**Purpose**: Ensure each email address is unique
-
-**SQL Code**:
-```sql
-CREATE TABLE employees (
-    emp_id INT PRIMARY KEY,
-    email VARCHAR(100) UNIQUE
-);
-```
-
-**Test**:
-```sql
-INSERT INTO employees VALUES (1, 'ahmed@email.com');
-INSERT INTO employees VALUES (2, 'ahmed@email.com');  -- ERROR! Email already exists
-```
-
-**Files to Study**:
-- `01-Primary-Key.sql` — Unique row identifiers
-- `02-Foreign-Key.sql` — Maintain relationships
-- `03-Not-Null-Constraint.sql` — Require values
-- `04-Unique-And-Check-Constraints.sql` — Enforce uniqueness and validation
-
----
-
-## 📖 CHAPTER 3: Intermediate SQL - Master Advanced Techniques
-
-### What You'll Learn in Chapter 3
-- How to **join** data from multiple tables
-- How to create **views** for simplified access
-- How to create **triggers** for automation
-
----
-
-### 1️⃣ **01-Advanced-Join-Expressions**: Combine Multiple Tables
-
-#### 📌 Theory: What are JOINs?
-JOINs combine data from multiple tables based on relationships.
-
-#### 💡 Example: INNER JOIN
-**Purpose**: Get employee names with department names
-
-**Tables**:
-```
-employees table:           departments table:
-emp_id | name    | dept_id  |  dept_id | dept_name
--------|---------|----------|----------|----------
-1      | Ahmed   | 1        |  1       | IT
-2      | Fatima  | 2        |  2       | Sales
-3      | Hassan  | 1        |  3       | HR
-```
-
-**SQL Code**:
-```sql
-SELECT e.name, d.dept_name 
-FROM employees e
-INNER JOIN departments d ON e.dept_id = d.dept_id;
-```
-
-**Output**:
-```
-name   | dept_name
--------|----------
-Ahmed  | IT
-Fatima | Sales
-Hassan | IT
-```
-
-**Why**: INNER JOIN shows only rows that exist in BOTH tables.
-
----
-
-#### 💡 Example 2: LEFT JOIN
-**Purpose**: Show all employees, even those without departments
-
-**SQL Code**:
-```sql
-SELECT e.name, d.dept_name 
-FROM employees e
-LEFT JOIN departments d ON e.dept_id = d.dept_id;
-```
-
-**Output**:
-```
-name   | dept_name
--------|----------
-Ahmed  | IT
-Fatima | Sales
-Hassan | IT
-Amina  | (NULL)  -- No department assigned
-```
-
-**LEFT JOIN includes ALL rows from left table, even if no match.**
-
-**Files to Study**:
-- `01-Joins-Comprehensive.sql` — All JOIN types (INNER, LEFT, RIGHT, FULL, CROSS)
-
----
-
-### 2️⃣ **02-View-Architectures**: Create Virtual Tables
-
-#### 📌 Theory: What is a VIEW?
-A VIEW is a saved query that acts like a virtual table.
-
-#### 💡 Example: CREATE VIEW
-**Purpose**: Create a view showing IT department employees
-
-**SQL Code**:
-```sql
-CREATE VIEW it_employees AS
-SELECT emp_id, name, salary 
-FROM employees 
-WHERE dept_id = 1;
-```
-
-**Usage**:
-```sql
-SELECT * FROM it_employees;
-```
-
-**Output**:
-```
-emp_id | name   | salary
--------|--------|----------
-1      | Ahmed  | 75000.00
-3      | Hassan | 85000.00
-```
-
-**Why use VIEWs?**
+### 🔟 **Views in SQL ARD.sql**
+**Virtual Tables & Data Abstraction**
+
+**Creating Views:**
+1. **JOIN-based View** - Combining students with departments
+2. **Filtered View** - High-performing students (marks > 80)
+
+**Using Views:**
+- Query views like regular tables
+- Apply additional filters on views
 - Simplify complex queries
-- Hide sensitive data
-- Improve security
-- Reuse queries
 
-**Files to Study**:
-- `01-Create-View.sql` — Create and use views
+**Examples:**
+```sql
+-- Create view
+CREATE VIEW student_department_view AS
+SELECT s.id, s.name, s.course, d.dept_name
+FROM students s JOIN department d
+ON s.dept_id = d.dept_id;
+
+-- Use view with filter
+SELECT * FROM student_department_view
+WHERE course = 'BCA';
+```
 
 ---
 
-### 3️⃣ **03-Triggers**: Automate Database Actions
+### 1️⃣1️⃣ **SQL Triggers ARD.sql**
+**Automated Database Actions**
 
-#### 📌 Theory: What is a TRIGGER?
-A TRIGGER automatically executes SQL code when data changes.
+**Two Types of Triggers Demonstrated:**
 
-#### 💡 Example: BEFORE INSERT Trigger
-**Purpose**: Ensure salary is always positive
+**1. AFTER INSERT Trigger:**
+- **Teacher Table** - Logs new teacher records
+- Automatically inserts log message after teacher insertion
+- Uses `Teacher_Log` table for audit trail
 
-**SQL Code**:
+**2. BEFORE INSERT Trigger:**
+- **Student Table** - Auto-calculates Pass/Fail result
+- Sets Result = 'Pass' if Marks > 40, else 'Fail'
+- Modifies data before insertion using `NEW` keyword
+
+**Syntax Structure:**
 ```sql
-CREATE TRIGGER check_salary 
-BEFORE INSERT ON employees
+DELIMITER //
+CREATE TRIGGER trigger_name
+{BEFORE|AFTER} {INSERT|UPDATE|DELETE}
+ON table_name
 FOR EACH ROW
 BEGIN
-    IF NEW.salary < 0 THEN
-        SET NEW.salary = 0;
-    END IF;
-END;
+    -- Trigger logic
+END //
+DELIMITER ;
 ```
-
-**What happens**:
-```sql
-INSERT INTO employees VALUES (5, 'Zara', 1, -5000);
-```
-
-The trigger automatically sets salary to 0 instead of allowing negative value.
-
-**Result in table**:
-```
-emp_id | name | salary
--------|------|-------
-5      | Zara | 0 (not -5000)
-```
-
-**Files to Study**:
-- `01-Introduction-to-Triggers.sql` — Create automated actions
 
 ---
 
-## 🎯 Learning Path
+## 🗃️ Database Schema Overview
 
-## 🎯 Learning Path
+### Main Tables Used:
 
-**Recommended Study Sequence:**
-
-1. **Week 1-2: Create Tables (Chapter 1 - DDL)**
-   - ✅ Understand table structure and data types
-   - ✅ Learn CREATE TABLE and ALTER TABLE
-   - ✅ Complete Assignment 1
-
-2. **Week 3-4: Query Data (Chapter 1 - Basic Components)**
-   - ✅ Master SELECT and WHERE
-   - ✅ Use ORDER BY, LIKE, and NULL handling
-   - ✅ Complete Assignment 2
-
-3. **Week 5-6: Summarize Data (Chapter 2 - Aggregates)**
-   - ✅ Use COUNT, SUM, AVG, MIN, MAX
-   - ✅ Learn GROUP BY and HAVING
-   - ✅ Complete Assignment 3
-
-4. **Week 7-8: Modify Data (Chapter 2 - DML)**
-   - ✅ Insert, Update, Delete data safely
-   - ✅ Understand transaction safety
-
-5. **Week 9-10: Enforce Integrity (Chapter 2 - Constraints)**
-   - ✅ Create PRIMARY and FOREIGN KEYs
-   - ✅ Apply NOT NULL, UNIQUE, CHECK constraints
-
-6. **Week 11-12: Combine Tables (Chapter 3 - JOINs)**
-   - ✅ Master INNER, LEFT, RIGHT JOINs
-   - ✅ Complete Assignment 4
-
-7. **Week 13: Create Views (Chapter 3 - Views)**
-   - ✅ Simplify complex queries with VIEWs
-   - ✅ Complete Assignment 6
-
-8. **Week 14: Automate (Chapter 3 - Triggers)**
-   - ✅ Create triggers for automation
-   - ✅ Complete Assignment 7
+| Table | Columns | Description |
+|-------|---------|-------------|
+| **students** | id, name, age, course, city, marks, dept_id | Student records with 14 entries |
+| **instructor** | id, name, department, salary | Faculty data with 15 entries (includes NULLs) |
+| **alumni** | PRN, Name | Alumni records with UNIQUE constraint |
+| **department** | dept_id, dept_name | Department master data |
+| **faculty** | faculty_id, faculty_name, dept_id | Faculty with FK to department |
+| **subject** | subject_id, subject_name, faculty_id, dept_id | Subjects with multiple FKs |
+| **teacher** | TeacherID, TeacherName, Subject, Salary | For trigger demonstrations |
 
 ---
 
-## 💡 Key Topics Covered
+## 🚀 Getting Started
 
-### Chapter 1: Foundations ✅
-✅ Table creation with CREATE TABLE  
-✅ Table modification with ALTER TABLE  
-✅ SELECT queries with projections  
-✅ WHERE clause filtering  
-✅ Logical operators (AND, OR, NOT)  
-✅ Pattern matching with LIKE  
-✅ Sorting with ORDER BY  
-✅ NULL value handling  
-✅ Set operations (UNION, INTERSECT, EXCEPT)  
+### Prerequisites
+- **MySQL Server 8.0+** or **MariaDB 10.0+**
+- **MySQL Workbench** (recommended) or any SQL client
+- Basic understanding of SQL syntax
 
-### Chapter 2: Advanced Operations ✅
-✅ Aggregate functions (COUNT, SUM, AVG, MIN, MAX)  
-✅ GROUP BY for data partitioning  
-✅ HAVING for group filtering  
-✅ INSERT for adding data  
-✅ UPDATE for modifying data  
-✅ DELETE for removing data safely  
-✅ PRIMARY KEY constraints  
-✅ FOREIGN KEY constraints  
-✅ NOT NULL, UNIQUE, CHECK constraints  
+### Installation & Setup
 
-### Chapter 3: Professional Techniques ✅
-✅ INNER JOIN for matching data  
-✅ LEFT JOIN for including all left rows  
-✅ RIGHT JOIN for including all right rows  
-✅ FULL OUTER JOIN for all rows  
-✅ CROSS JOIN for Cartesian product  
-✅ Views for query simplification  
-✅ Triggers for automation  
-
----
-
-## 🚀 How to Use This Repository
-
-### Step 1: Setup Your Environment
+1. **Clone the repository:**
 ```bash
-# Install MySQL if not already installed
-# Open MySQL Workbench or terminal
-
-# Create a practice database
-CREATE DATABASE learning_sql;
-USE learning_sql;
+git clone https://github.com/Arjunyaa/DBMS-Practical.git
+cd DBMS-Practical
 ```
 
-### Step 2: Choose Your Learning Style
+2. **Start MySQL Server:**
+```bash
+# Windows
+net start MySQL80
 
-**📖 Reading Mode** (Just Learning):
-1. Open a file from Chapter 1
-2. Read the comments carefully
-3. Look at the examples
-4. Understand the output
+# Linux/Mac
+sudo systemctl start mysql
+```
 
-**🎯 Hands-On Mode** (Best Way to Learn):
-1. Open a file from Chapter 1
-2. Execute the SQL code step-by-step
-3. Modify queries to experiment
-4. See how output changes
-5. Complete the assignment
+3. **Login to MySQL:**
+```bash
+mysql -u root -p
+```
 
-**💻 Coding Mode** (Maximum Learning):
-1. Close the file
-2. Recreate the examples from memory
-3. Test different variations
-4. Complete the assignment first before checking solutions
+4. **Execute SQL files in order:**
+```sql
+SOURCE 'path/to/Creating tables ARD.sql';
+SOURCE 'path/to/Data constraints ARD.sql';
+-- Continue with other files
+```
 
-### Step 3: Complete Assignments
-Each chapter has practice assignments:
-- ✅ Assignment 1: DDL Commands
-- ✅ Assignment 2: SELECT Queries
-- ✅ Assignment 3: Aggregate Functions
-- ⏳ Assignment 4: JOINs (coming soon)
-- ⏳ Assignment 5: Subqueries (coming soon)
-- ⏳ Assignment 6: Views (coming soon)
-- ⏳ Assignment 7: Triggers (coming soon)
+### Recommended Learning Order:
+
+1. **Beginner Level:**
+   - Creating tables ARD.sql
+   - Aggregates Function and Group By ARD.sql
+   - String and Set Operation, Order By ARD.sql
+
+2. **Intermediate Level:**
+   - Data constraints ARD.sql
+   - Type of Joints ARD.sql
+   - Null Values and Null Values (Cont.) ARD.sql
+
+3. **Advanced Level:**
+   - Subqueries in Form and With Clause ARD.sql
+   - Exists and Not Exists ARD.sql
+   - SOME and ALL clause ARD.sql
+   - Views in SQL ARD.sql
+   - SQL Triggers ARD.sql
 
 ---
 
-## 📊 Understanding Query Execution
+## 📖 Concepts Covered
 
-### How SQL Processes a Query
+### SQL Language Categories:
+- ✅ **DDL** - Data Definition Language (CREATE, ALTER, DROP, DESCRIBE)
+- ✅ **DML** - Data Manipulation Language (INSERT, UPDATE, DELETE)
+- ✅ **DQL** - Data Query Language (SELECT with various clauses)
+- ✅ **DCL** - Data Control Language (Constraints, Foreign Keys)
+- ✅ **TCL** - Transaction Control Language (Triggers)
 
-When you execute:
-```sql
-SELECT first_name, salary 
-FROM employees 
-WHERE salary > 50000 
-ORDER BY salary DESC;
-```
-
-SQL processes it in this order:
-1. **FROM** — Find the table (employees)
-2. **WHERE** — Filter rows (salary > 50000)
-3. **SELECT** — Choose columns (first_name, salary)
-4. **ORDER BY** — Sort results (by salary descending)
-
-**Output**:
-```
-first_name | salary
------------|----------
-Hassan     | 85000.00
-Ahmed      | 75000.00
-Amina      | 78000.00
-```
-
-This is important because it explains **why** certain queries work or don't work!
+### Core Topics:
+- ✅ Database & Table Creation
+- ✅ Primary & Foreign Key Constraints
+- ✅ Aggregate Functions (COUNT, SUM, AVG, MIN, MAX)
+- ✅ GROUP BY & HAVING clauses
+- ✅ String Operations & Pattern Matching (LIKE)
+- ✅ Sorting (ORDER BY ASC/DESC)
+- ✅ Range Queries (BETWEEN)
+- ✅ Set Operations (UNION, INTERSECT, EXCEPT)
+- ✅ All JOIN types (INNER, LEFT, RIGHT, FULL OUTER, CROSS)
+- ✅ Subqueries (FROM clause, WHERE clause)
+- ✅ Common Table Expressions (WITH clause)
+- ✅ NULL Value Handling & Three-Valued Logic
+- ✅ EXISTS & NOT EXISTS
+- ✅ SOME & ALL Operators
+- ✅ Views (Virtual Tables)
+- ✅ Triggers (BEFORE/AFTER INSERT)
 
 ---
 
-## 🧪 Practice Tips
+## 💡 Sample Queries by Use Case
 
-### ✅ DO:
-- Execute code line by line
-- Modify examples to see results change
-- Create test tables to practice
-- Complete all assignments
-- Ask "why?" for each result
-
-### ❌ DON'T:
-- Just read without executing
-- Skip assignments
-- Use DELETE without WHERE
-- Ignore error messages
-- Move to next topic if confused
-
----
-
-## 🎓 Common Mistakes to Avoid
-
-### ❌ Mistake 1: Forgetting WHERE in DELETE
+### Find High-Performing Students:
 ```sql
-DELETE FROM employees;  -- ❌ Deletes ALL employees!
-DELETE FROM employees WHERE emp_id = 1;  -- ✅ Correct
+SELECT * FROM students WHERE marks > 85 ORDER BY marks DESC;
 ```
 
-### ❌ Mistake 2: Using WHERE with GROUP BY
+### Department-wise Average Salary:
 ```sql
-SELECT department, COUNT(*) FROM employees
-WHERE COUNT(*) > 2  -- ❌ Wrong! Use HAVING instead
+SELECT department, AVG(salary) as avg_salary
+FROM instructor
 GROUP BY department;
-
--- ✅ Correct:
-SELECT department, COUNT(*) FROM employees
-GROUP BY department
-HAVING COUNT(*) > 2;
 ```
 
-### ❌ Mistake 3: Forgetting to JOIN Tables
+### Students Without Department:
 ```sql
-SELECT e.name, d.dept_name FROM employees e, departments d;
--- ❌ This creates a CROSS JOIN (every employee with every department!)
-
--- ✅ Correct:
-SELECT e.name, d.dept_name FROM employees e
-INNER JOIN departments d ON e.dept_id = d.dept_id;
+SELECT * FROM students WHERE dept_id IS NULL;
 ```
 
-### ❌ Mistake 4: NULL in Comparisons
+### Course Completion Check:
 ```sql
-SELECT * FROM employees WHERE phone = NULL;  -- ❌ Wrong!
-SELECT * FROM employees WHERE phone IS NULL;  -- ✅ Correct
+SELECT * FROM student_department_view WHERE course = 'BCA';
 ```
 
 ---
 
-## 📈 Progress Tracking
+## 🛠️ Tips for Practice
 
-**Chapter 1 Progress:**
-- [ ] Completed DDL Commands section
-- [ ] Completed Basic Query Components section
-- [ ] Completed Additional Base Operations section
-- [ ] Completed Set Operations section
-- [ ] Completed NULL Handling section
-- [ ] Completed Assignment 1
-- [ ] Completed Assignment 2
-- [ ] Completed Assignment 3
-
-**Chapter 2 Progress:**
-- [ ] Completed Aggregate Functions section
-- [ ] Completed Database Modification Commands section
-- [ ] Completed Data Constraints section
-- [ ] Completed Assignment 4
-- [ ] Completed Assignment 5
-
-**Chapter 3 Progress:**
-- [ ] Completed Advanced JOINs section
-- [ ] Completed Views section
-- [ ] Completed Triggers section
-- [ ] Completed Assignment 6
-- [ ] Completed Assignment 7
+1. **Modify Data:** Try inserting your own records
+2. **Experiment:** Change WHERE conditions and observe results
+3. **Combine Concepts:** Mix JOINs with GROUP BY and HAVING
+4. **Break Queries:** Understand error messages
+5. **Use EXPLAIN:** Analyze query execution plans
+6. **Practice Triggers:** Create triggers for UPDATE and DELETE operations
 
 ---
 
-## ⚠️ Important Notes
+## 📊 Sample Dataset Statistics
 
-### Before You Start:
-- ✅ MySQL 5.7 or higher installed
-- ✅ MySQL Workbench or command line client ready
-- ✅ 30 minutes daily for 8 weeks recommended
-- ✅ Patience—SQL mastery takes practice!
-
-### Safety Rules:
-- 🔒 Always use WHERE clause with UPDATE/DELETE
-- 🔒 Test SELECT before UPDATE/DELETE
-- 🔒 Backup data before running DELETE statements
-- 🔒 Use transactions for multi-step operations
-
-### Best Practices:
-- 📝 Comment your code
-- 📝 Use meaningful table and column names
-- 📝 Format queries for readability
-- 📝 Test edge cases (NULL, empty sets, duplicates)
+- **14 Students** across BCA, BBA, BTech courses
+- **15 Instructors** from 5 departments (Computer, IT, Mechanical, Electrical, Civil)
+- **10 Alumni** records
+- **Multiple departments** with faculty and subject mappings
+- **Marks Range:** 67-95 (students)
+- **Salary Range:** 45,000-70,000 (instructors, excluding NULLs)
 
 ---
 
-## 🏆 Success Metrics
+## 🤝 Contributing
 
-### Week 1-2 Goals:
-- ✅ Understand table structure
-- ✅ Can write CREATE TABLE
-- ✅ Can modify tables with ALTER TABLE
+Contributions are welcome! Here's how:
 
-### Week 3-4 Goals:
-- ✅ Can write SELECT queries
-- ✅ Can filter with WHERE
-- ✅ Can sort with ORDER BY
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/NewConcept`)
+3. Add your SQL examples with comments
+4. Commit changes (`git commit -m 'Add new SQL concept'`)
+5. Push to branch (`git push origin feature/NewConcept`)
+6. Open a Pull Request
 
-### Week 5-6 Goals:
-- ✅ Can use aggregate functions
-- ✅ Can GROUP and filter with HAVING
-- ✅ Can create summary reports
-
-### Week 7-8 Goals:
-- ✅ Can INSERT, UPDATE, DELETE safely
-- ✅ Understand transaction safety
-- ✅ Can work with real-world data
-
-### Week 9-10 Goals:
-- ✅ Can design tables with constraints
-- ✅ Understand PRIMARY and FOREIGN keys
-- ✅ Can enforce data integrity
-
-### Week 11-12 Goals:
-- ✅ Can write INNER and LEFT JOINs
-- ✅ Can combine multiple tables
-- ✅ Can solve multi-table queries
-
-### Week 13 Goals:
-- ✅ Can create and use VIEWs
-- ✅ Can simplify complex queries
-- ✅ Understand view limitations
-
-### Week 14 Goals:
-- ✅ Can create BEFORE/AFTER triggers
-- ✅ Can automate database actions
-- ✅ Can validate data with triggers
+**What to contribute:**
+- Additional SQL concepts (Stored Procedures, Functions, Indexes)
+- Real-world use cases
+- Performance optimization examples
+- Error handling scenarios
 
 ---
 
-## 🎁 Bonus: Real-World Projects
+## 📝 Notes
 
-After completing the main curriculum, try these:
-
-### Project 1: E-Commerce Database
-Design a database for an online store:
-- Products table
-- Customers table
-- Orders table
-- Order Items table (with relationships)
-
-### Project 2: School Management System
-Design a database for a school:
-- Students table
-- Teachers table
-- Classes table
-- Grades table (with relationships)
-
-### Project 3: Social Media Database
-Design a database for social media:
-- Users table
-- Posts table
-- Comments table
-- Likes table
+- All queries are tested on **MySQL 8.0**
+- Some syntax may vary for PostgreSQL, Oracle, or SQL Server
+- Comments are included in SQL files for clarity
+- Sample data includes intentional NULL values for practice
 
 ---
 
-## 📚 Learning Path
+## 🐛 Common Issues & Solutions
+
+**Issue:** Foreign key constraint fails  
+**Solution:** Ensure parent table data exists before inserting child records
+
+**Issue:** Trigger doesn't execute  
+**Solution:** Check delimiter syntax and use `SHOW TRIGGERS` to verify
+
+**Issue:** View not updating  
+**Solution:** Views are virtual; base table changes reflect automatically
+
+---
+
+## 📧 Contact & Support
+
+- **Repository Owner:** Arjunyaa
+- **GitHub:** [@Arjunyaa](https://github.com/Arjunyaa)
+- **Issues:** Report bugs or request features via [GitHub Issues](https://github.com/Arjunyaa/DBMS-Practical/issues)
+
+---
+
+## 📄 License
+
+This project is open-source and available under the **MIT License** for educational purposes.
+
+Feel free to use, modify, and distribute with attribution.
+
+---
+
+## ⭐ Acknowledgments
+
+Special thanks to all contributors and the SQL community for making database learning accessible!
+
+---
+
+<div align="center">
+
+### 🎯 **Master SQL with Hands-On Practice!**
+
+**Star ⭐ this repository if you find it helpful!**
+
+[![GitHub Stars](https://img.shields.io/github/stars/Arjunyaa/DBMS-Practical?style=social)](https://github.com/Arjunyaa/DBMS-Practical)
+[![GitHub Forks](https://img.shields.io/github/forks/Arjunyaa/DBMS-Practical?style=social)](https://github.com/Arjunyaa/DBMS-Practical/fork)
+
+**Happy Learning! 🎓💻**
+
+</div>
